@@ -1,0 +1,82 @@
+#Mini Project: “Simulated Sensor Recording”
+
+#Dictionaries:
+electrical_subsystem = {
+    "Temperature in K": 0,
+    "Pressure in kPa": 0,
+    "Voltage in V": 0,
+    "Current in A": 0,
+    "Battery_input in kW": 0,
+    "Battery_output in kW": 0,
+    "Solar_panel_input in kW": 0,
+    "Solar_panel_output in kW": 0
+}
+
+mission_subsystem = {
+    "Temperature in K": 0,
+    "Semimajor_axis in Km": 0,
+    "Altitude in Km": 0,
+    "Velocity in Km/s": 0
+}
+
+#Functions: 
+def Final_Report():
+    print("\n-----Final Report-----\n")
+    print("\n------Electrical Subsystem------\n")
+    for key, value in electrical_subsystem.items():
+        print(f"{key}: {value}")
+    
+    print("\n------Mission Subsystem------\n")
+    for key, value in mission_subsystem.items():
+        print(f"{key}: {value}")
+    
+def Receive_Sensor_Data():
+    while(True):
+
+        try:
+            option = input("Select Sensors Subsystem: \n(1) Electrical \n(2) Mission\nOr type 'end' to quit\n")
+            match (option):
+                case "1":# Electrical Subsystem
+
+                    while(True):
+                        for key in electrical_subsystem:
+                            user_input = input(f"Sensor: {key} \nInsert value (or type 'end' to quit): ")
+                            if user_input.lower() == "end": 
+                                print("Program ending...")
+                                Final_Report()
+                                exit()
+                            try:
+                                electrical_subsystem[key] = int(user_input)
+                                print("\nSaved...\n")
+                            except ValueError:
+                                print("Please enter a valid number or 'end'.")
+                        break
+
+
+                case "2":# Mission Subsystem
+                    while(True):
+                        for key in mission_subsystem:
+                            user_input = input(f"Sensor: {key} \nInsert value (or type 'end' to quit): ")
+                            if user_input.lower() == "end": 
+                                print("Program ending...")
+                                Final_Report()
+                                exit()
+                            try:
+                                mission_subsystem[key] = int(user_input)
+                                print("\nSaved...\n")
+                            except ValueError:
+                                print("Please enter a valid number or 'end'.")
+                        break
+
+                case "end":
+                    Final_Report()
+                    exit()
+                
+        except ValueError:
+            print("\nPlease select a valid option\n")
+
+
+#===MAIN====#
+print("-----Sensor Data-----")
+print("Type \"end\" to quit the program.")
+Receive_Sensor_Data()
