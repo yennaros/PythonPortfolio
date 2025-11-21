@@ -1,0 +1,5 @@
+INFO Satellite system booting...
+WARN Temperature high
+ERROR Solar panel malfunction
+INFO System stable
+ERROR Propulsion valve anomaly
