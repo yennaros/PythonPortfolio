@@ -1,0 +1,53 @@
+import matplotlib.pyplot as plt
+
+counters = {"WARN": 0, "ERROR": 0, "INFO": 0}
+
+def closing_app():
+    print("Ending application")
+
+def readLogFile(counters):
+    while (True):
+        try:
+            with open('log.txt', 'r') as log_file:
+                for line in log_file:
+                    for key in counters:
+                        if key in line:
+                            counters[key] += 1
+
+            print("\nAnalyzing log...\n")
+            print(f"WARN: {counters['WARN']}")
+            print(f"ERROR: {counters['ERROR']}")
+            print(f"INFO: {counters['INFO']}")
+            break
+        except:
+            user_input = input("An error has occurred, please type 'end' to quit or type any key to start again")
+            if user_input == 'end':
+                closing_app()
+                exit()
+
+def creationSummaryLog(counters, counter_of_files, filename = "summary.txt"):
+    with open('summary.txt', 'w') as create_summary_file:
+        create_summary_file.write(f"Log Number: {counter_of_files} \n")
+        for key, value in counters.items():
+            create_summary_file.write(f"{key}: {value}\n")
+    print(f"\nSummary created in {create_summary_file.name}")
+    return filename
+
+
+#------- grafica ---------
+def statistics(graphic_counter):
+    labels = list(counters.keys())
+    values = list(counters.values())
+    plt.bar(labels,values)
+    plt.title("Log Counts")
+    plt.xlabel("Message")
+    plt.ylabel("Amount")
+    plt.savefig(f"grafica_logs{graphic_counter}.png")
+    plt.close()
+
+#-------------MAIN-------------
+file_counter = 1
+graphic_counter = 1
+readLogFile(counters)
+creationSummaryLog(counters, file_counter)
+statistics(graphic_counter)
