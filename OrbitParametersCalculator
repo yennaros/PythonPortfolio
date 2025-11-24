@@ -1,0 +1,90 @@
+import math
+import json
+
+orbit_parameters = {'mu': 0,
+                    'orbit': '',
+                    'rp': 0,
+                    'ra': 0,
+                    'a': 0,
+                    'e': 0,
+                    'T': 0
+                    }
+
+def type_of_orbit():
+    print("Please select one of the following options:")
+    print("(1) Circle\n(2) Ellipse\n(3) Parabola\n(4) Hyperbola\n(5) Exit")
+    user_selection = int(input())
+    match (user_selection):
+        case 1: #Circle
+            orbit_parameters["ra"] = float(input("Insert radius [km]: "))
+            orbit_parameters["rp"] = orbit_parameters["ra"]
+            orbit_parameters["orbit"] = 'Circle'
+        case 2: #Ellipse
+            orbit_parameters["rp"] = float(input("Insert perigee radius [km]: "))
+            orbit_parameters["ra"] = float(input("Insert apogee radius [km]: "))
+            orbit_parameters["orbit"] = 'Ellipse'
+        case 3: #Parabola
+            orbit_parameters["rp"] = float(input("Insert perigee radius [km]: "))        
+            orbit_parameters["orbit"] = 'Parabola'
+        case 4: #Hyperbola
+            orbit_parameters["rp"] = float(input("Insert perigee radius [km]: "))
+            orbit_parameters["orbit"] = 'Hyperbola'
+        case 5:
+            exit()
+
+def massive_object():
+    print("Select your planet or massive object:")
+    print("(1) Earth\n(2) Mars\n(3) Moon\n(4) Sun\n(5) Exit")
+    user_selection2 = int(input())
+    match (user_selection2):
+        case 1: #Earth
+            orbit_parameters["mu"] = 398600 #km3/s2
+        case 2: #Mars
+            orbit_parameters["mu"] = 42800 #km3/s2
+        case 3: #Moon
+            orbit_parameters["mu"] = 4902.8 #km3/s2
+        case 4: #Sun
+            orbit_parameters["mu"] = 132712440042 #km3/s2
+        case 5:
+            exit()
+
+def semimajor_axis():
+    if orbit_parameters["orbit"] == 'Circle':
+        orbit_parameters["a"] = orbit_parameters["ra"]
+
+    elif orbit_parameters["orbit"] == 'Ellipse':
+        orbit_parameters["a"] = (orbit_parameters["ra"] + orbit_parameters["rp"]) / 2
+
+
+def excentricity():
+    if orbit_parameters["orbit"] == 'Ellipse':
+        orbit_parameters["e"] = (orbit_parameters["ra"]-orbit_parameters["rp"])/(orbit_parameters["ra"]+orbit_parameters["rp"])
+    elif orbit_parameters["orbit"] == 'Parabola':
+        orbit_parameters["e"] = 1
+    elif orbit_parameters["orbit"] == 'Hyperbola':
+        orbit_parameters["e"] = "Greater than 1*"
+
+def period():
+    if orbit_parameters["orbit"] == 'Circle':
+        orbit_parameters["T"] = 2 * math.pi * (math.sqrt(pow(orbit_parameters["a"],3))/orbit_parameters["mu"])
+
+    elif orbit_parameters["orbit"] == 'Ellipse':
+        orbit_parameters["T"] = 2 * math.pi * (math.sqrt(pow(orbit_parameters["a"],3))/orbit_parameters["mu"])
+    
+def save_orbit():
+    try:
+        filename = "OrbitalParameters.json"
+        with open(filename, "w") as json_file:
+            json.dump(orbit_parameters, json_file, indent = 4)
+        print(f"File saved as: {filename}")
+    except IOError as e:
+        print(f"Error saving file: {e}")
+
+
+print("Welcome to orbital parameters calculator 3000.")
+type_of_orbit()
+massive_object()
+semimajor_axis()
+excentricity()
+period()
+save_orbit()
